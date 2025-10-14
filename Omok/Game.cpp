@@ -72,6 +72,7 @@ int main()
 			board[column][row] = "○";     //●
 			cout << board[column][row];
 		}
+
 	}
 
 	return 0;

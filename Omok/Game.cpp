@@ -6,6 +6,7 @@ using namespace std;
 
 int row = 0; // 행
 int column = 0; // 열
+int turn = 1;
 string board[15][15] = {};
 
 
@@ -67,10 +68,23 @@ int main()
 
 		gotoxy(column, row);
 
-		if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+		if (turn % 2 == 1)
 		{
-			board[column][row] = "○";     //●
-			cout << board[column][row];
+			if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+			{
+				board[column][row] = "○";     //●
+				cout << board[column][row];
+				turn++;
+			}
+		}
+		else
+		{
+			if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+			{
+				board[column][row] = "●";     //●
+				cout << board[column][row];
+				turn++;
+			}
 		}
 
 	}

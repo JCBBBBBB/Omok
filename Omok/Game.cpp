@@ -62,88 +62,128 @@ bool IsGameOver() // row : 행   column : 열
 	{
 		for (int j = 0; j < MAX; j++)
 		{
+			
+
 			// 가로
 			if (board[i][j] == "○" && board[i + 1][j] == "○" && board[i + 2][j] == "○" && board[i + 3][j] == "○" && board[i + 4][j] == "○")
 			{
-				winNum = 1;
-				return true;
+				if (board[i + 5][j] != "○" && board[i-1][j] != "○")
+				{
+					winNum = 1;
+					return true;
+				}
+				
 			}
+
 
 			//세로
 			if (board[i][j] == "○" && board[i][j + 1] == "○" && board[i][j + 2] == "○" && board[i][j + 3] == "○" && board[i][j + 4] == "○")
 			{
-				winNum = 1;
-				return true;
+				if (board[i][j - 1] != "○" && board[i][j + 5] != "○")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 
 			//왼 아래 대각
 			if (board[i][j] == "○" && board[i - 1][j + 1] == "○" && board[i - 2][j + 2] == "○" && board[i - 3][j + 3] == "○" && board[i - 4][j + 4] == "○")
 			{
-				winNum = 1;
-				return true;
+				if (board[i + 1][j - 1] != "○" && board[i - 5][j + 5] != "○")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 
 			// 오른 아래 대각
 			if (board[i][j] == "○" && board[i + 1][j + 1] == "○" && board[i + 2][j + 2] == "○" && board[i + 3][j + 3] == "○" && board[i + 4][j + 4] == "○")
 			{
-				winNum = 1;
-				return true;
+				if (board[i-1][j - 1] != "○" && board[i+5][j + 5] != "○")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 
 			// 왼 위 대각
 			if (board[i][j] == "○" && board[i - 1][j - 1] == "○" && board[i - 2][j - 2] == "○" && board[i - 3][j - 3] == "○" && board[i - 4][j - 4] == "○")
 			{
-				winNum = 1;
-				return true;
+				if (board[i+1][j + 1] != "○" && board[i-5][j - 5] != "○")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 
 			//오른 위 대각
 			if (board[i][j] == "○" && board[i + 1][j - 1] == "○" && board[i + 2][j - 2] == "○" && board[i + 3][j - 3] == "○" && board[i + 4][j - 4] == "○")
 			{
-				winNum = 1;
-				return true;
+				if (board[i - 1][j + 1] != "○" && board[i+5][j - 5] != "○")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 
 			// 가로
 			if (board[i][j] == "●" && board[i + 1][j] == "●" && board[i + 2][j] == "●" && board[i + 3][j] == "●" && board[i + 4][j] == "●")
 			{
-				winNum = 2;
-				return true;
+				if (board[i + 5][j] != "●" && board[i - 1][j] != "●")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 
 			//세로
 			if (board[i][j] == "●" && board[i][j + 1] == "●" && board[i][j + 2] == "●" && board[i][j + 3] == "●" && board[i][j + 4] == "●")
 			{
-				winNum = 2;
-				return true;
+				if (board[i][j - 1] != "●" && board[i][j + 5] != "●")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 
 			//왼 아래 대각
 			if (board[i][j] == "●" && board[i - 1][j + 1] == "●" && board[i - 2][j + 2] == "●" && board[i - 3][j + 3] == "●" && board[i - 4][j + 4] == "●")
 			{
-				winNum = 2;
-				return true;
+				if (board[i + 1][j - 1] != "●" && board[i - 5][j + 5] != "●")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 
 			// 오른 아래 대각
 			if (board[i][j] == "●" && board[i + 1][j + 1] == "●" && board[i + 2][j + 2] == "●" && board[i + 3][j + 3] == "●" && board[i + 4][j + 4] == "●")
 			{
-				winNum = 2;
-				return true;
+				if (board[i - 1][j - 1] != "●" && board[i + 5][j + 5] != "●")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 
 			// 왼 위 대각
 			if (board[i][j] == "●" && board[i - 1][j - 1] == "●" && board[i - 2][j - 2] == "●" && board[i - 3][j - 3] == "●" && board[i - 4][j - 4] == "●")
 			{
-				winNum = 2;
-				return true;
+				if (board[i + 1][j + 1] != "●" && board[i - 5][j - 5] != "●")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 
 			//오른 위 대각
 			if (board[i][j] == "●" && board[i + 1][j - 1] == "●" && board[i + 2][j - 2] == "●" && board[i + 3][j - 3] == "●" && board[i + 4][j - 4] == "●")
 			{
-				winNum = 2;
-				return true;
+				if (board[i - 1][j + 1] != "●" && board[i + 5][j - 5] != "●")
+				{
+					winNum = 1;
+					return true;
+				}
 			}
 		}
 	}
@@ -196,7 +236,7 @@ int main()
 
 			case 72: // 위
 				row--;
-				if (!board[column][row].empty() || column < 0 || row < 0 || column >= MAX || row >= MAX)
+				if (column < 0 || row < 0 || column >= MAX || row >= MAX)
 				{
 					row++;
 					continue;
@@ -205,7 +245,7 @@ int main()
 
 			case 80: // 아래
 				row++;
-				if (!board[column][row].empty() || column < 0 || row < 0 || column >= MAX || row >= MAX)
+				if (column < 0 || row < 0 || column >= MAX || row >= MAX)
 				{
 					row--;
 					continue;
@@ -214,7 +254,7 @@ int main()
 
 			case 75: // 왼쪽
 				column--;
-				if (!board[column][row].empty() || column < 0 || row < 0 || column >= MAX || row >= MAX)
+				if (column < 0 || row < 0 || column >= MAX || row >= MAX)
 				{
 					column++;
 					continue;
@@ -223,7 +263,7 @@ int main()
 
 			case 77: // 오른쪽
 				column++;
-				if (!board[column][row].empty() || column < 0 || row < 0 || column >= MAX || row >= MAX)
+				if (column < 0 || row < 0 || column >= MAX || row >= MAX)
 				{
 					column--;
 					continue;

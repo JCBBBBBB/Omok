@@ -8,19 +8,21 @@ using namespace std;
 
 int row = 0; // 행
 int column = 0; // 열
-int turn = 1;
-string board[15][15] = {};
-
+int turn = 1; // 턴 세는 정수
+int winNum = 0; // 백돌이 이기면 1, 흑돌이 이기면 2
 int temp = 224; // 방향키 arrow
 
+string board[15][15] = {}; // 돌 정보를 넣는 2차원 배열
 
-void gotoxy(int x, int y) 
+
+
+void gotoxy(int x, int y) // 커서
 { 
 	COORD Cur = { x * 2, y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur); 
 }
 
-void SetBoard()
+void SetBoard() // 오목판 깔기
 {
 	for (int i = 0; i < MAX; i++)
 	{
@@ -32,6 +34,7 @@ void ChangeTurn() // 흑돌, 백돌 턴 교체
 {
 	if ((turn % 2 == 1) && board[column][row].empty())
 	{
+
 		if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 		{
 			board[column][row] = "○";     //●
@@ -52,7 +55,8 @@ void ChangeTurn() // 흑돌, 백돌 턴 교체
 	gotoxy(column, row);
 }
 
-bool isGameOver() // row : 행   column : 열
+// 5개 돌 이어졌나 확인
+bool IsGameOver() // row : 행   column : 열
 {
 	for (int i = 0; i < MAX; i++)
 	{
@@ -61,72 +65,84 @@ bool isGameOver() // row : 행   column : 열
 			// 가로
 			if (board[i][j] == "○" && board[i + 1][j] == "○" && board[i + 2][j] == "○" && board[i + 3][j] == "○" && board[i + 4][j] == "○")
 			{
+				winNum = 1;
 				return true;
 			}
 
 			//세로
 			if (board[i][j] == "○" && board[i][j + 1] == "○" && board[i][j + 2] == "○" && board[i][j + 3] == "○" && board[i][j + 4] == "○")
 			{
+				winNum = 1;
 				return true;
 			}
 
 			//왼 아래 대각
 			if (board[i][j] == "○" && board[i - 1][j + 1] == "○" && board[i - 2][j + 2] == "○" && board[i - 3][j + 3] == "○" && board[i - 4][j + 4] == "○")
 			{
+				winNum = 1;
 				return true;
 			}
 
 			// 오른 아래 대각
 			if (board[i][j] == "○" && board[i + 1][j + 1] == "○" && board[i + 2][j + 2] == "○" && board[i + 3][j + 3] == "○" && board[i + 4][j + 4] == "○")
 			{
+				winNum = 1;
 				return true;
 			}
 
 			// 왼 위 대각
 			if (board[i][j] == "○" && board[i - 1][j - 1] == "○" && board[i - 2][j - 2] == "○" && board[i - 3][j - 3] == "○" && board[i - 4][j - 4] == "○")
 			{
+				winNum = 1;
 				return true;
 			}
 
 			//오른 위 대각
 			if (board[i][j] == "○" && board[i + 1][j - 1] == "○" && board[i + 2][j - 2] == "○" && board[i + 3][j - 3] == "○" && board[i + 4][j - 4] == "○")
 			{
+				winNum = 1;
 				return true;
 			}
 
 			// 가로
 			if (board[i][j] == "●" && board[i + 1][j] == "●" && board[i + 2][j] == "●" && board[i + 3][j] == "●" && board[i + 4][j] == "●")
 			{
+				winNum = 2;
 				return true;
 			}
 
 			//세로
 			if (board[i][j] == "●" && board[i][j + 1] == "●" && board[i][j + 2] == "●" && board[i][j + 3] == "●" && board[i][j + 4] == "●")
 			{
+				winNum = 2;
 				return true;
 			}
 
 			//왼 아래 대각
 			if (board[i][j] == "●" && board[i - 1][j + 1] == "●" && board[i - 2][j + 2] == "●" && board[i - 3][j + 3] == "●" && board[i - 4][j + 4] == "●")
 			{
+				winNum = 2;
 				return true;
 			}
 
 			// 오른 아래 대각
 			if (board[i][j] == "●" && board[i + 1][j + 1] == "●" && board[i + 2][j + 2] == "●" && board[i + 3][j + 3] == "●" && board[i + 4][j + 4] == "●")
 			{
+				winNum = 2;
 				return true;
 			}
 
 			// 왼 위 대각
 			if (board[i][j] == "●" && board[i - 1][j - 1] == "●" && board[i - 2][j - 2] == "●" && board[i - 3][j - 3] == "●" && board[i - 4][j - 4] == "●")
 			{
+				winNum = 2;
 				return true;
 			}
 
 			//오른 위 대각
 			if (board[i][j] == "●" && board[i + 1][j - 1] == "●" && board[i + 2][j - 2] == "●" && board[i + 3][j - 3] == "●" && board[i + 4][j - 4] == "●")
 			{
+				winNum = 2;
 				return true;
 			}
 		}
@@ -134,16 +150,38 @@ bool isGameOver() // row : 행   column : 열
 
 	return false;
 	
+} // 5개 
+
+void EraseTurn()
+{
+	gotoxy(20, 0);
+	cout << "        " << endl;
 }
+
+void PrintWinner()
+{
+	gotoxy(0, 18);
+
+	if (winNum == 1)
+	{
+		cout << "백돌이 이겼습니다!" << endl;
+	}
+
+	else if (winNum == 2)
+	{
+		cout << "흑돌이 이겼습니다!" << endl;
+	}
+}
+
+
+
 
 int main()
 {
 	SetBoard();
 	gotoxy(column, row);
 
-	
-
-	while (true && !isGameOver()) // false 되면 break
+	while (!IsGameOver()) // false 되면 break
 	{
 		temp = _getch();
 
@@ -195,12 +233,23 @@ int main()
 			
 		}
 
+		gotoxy(20, 0);
+		if (turn % 2 == 1)
+		{
+			cout << "백돌 차례" << endl;
+		}
+		else
+		{
+			cout << "흑돌 차례" << endl;
+		}
 		gotoxy(column, row);
 		ChangeTurn();
 
 	}
 
-	gotoxy(0, 20);
+	EraseTurn();
+	PrintWinner();
+	
 	system("pause");
 	return 0;
 }

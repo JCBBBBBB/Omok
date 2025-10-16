@@ -15,14 +15,15 @@ int temp = 224; // 방향키 arrow
 string board[15][15] = {}; // 돌 정보를 넣는 2차원 배열
 
 
-
-void gotoxy(int x, int y) // 커서
+// 커서 이동
+void gotoxy(int x, int y)
 { 
 	COORD Cur = { x * 2, y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur); 
 }
 
-void SetBoard() // 오목판 깔기
+// 오목판 깔기
+void SetBoard()
 {
 	for (int i = 0; i < MAX; i++)
 	{
@@ -30,7 +31,8 @@ void SetBoard() // 오목판 깔기
 	}
 }
 
-void ChangeTurn() // 흑돌, 백돌 턴 교체
+// 흑돌, 백돌 턴 교체
+void ChangeTurn()
 {
 	if ((turn % 2 == 1) && board[column][row].empty())
 	{
@@ -62,12 +64,18 @@ bool IsGameOver() // row : 행   column : 열
 	{
 		for (int j = 0; j < MAX; j++)
 		{
-			
-
-			// 가로
+		
+			// 백돌 가로
 			if (board[i][j] == "○" && board[i + 1][j] == "○" && board[i + 2][j] == "○" && board[i + 3][j] == "○" && board[i + 4][j] == "○")
 			{
-				if (board[i + 5][j] != "○" && board[i-1][j] != "○")
+
+				if (i == 0 || i + 4 == MAX)
+				{
+					winNum = 1;
+					return true;
+				}
+
+				if ((board[i - 1][j] != "○") || (board[i + 5][j] != "○"))
 				{
 					winNum = 1;
 					return true;
@@ -76,19 +84,31 @@ bool IsGameOver() // row : 행   column : 열
 			}
 
 
-			//세로
+			// 백돌 세로
 			if (board[i][j] == "○" && board[i][j + 1] == "○" && board[i][j + 2] == "○" && board[i][j + 3] == "○" && board[i][j + 4] == "○")
 			{
-				if (board[i][j - 1] != "○" && board[i][j + 5] != "○")
+				if (j == 0 || j + 4 == MAX)
+				{
+					winNum = 1;
+					return true;
+				}
+
+				if ((board[i][j - 1] != "○") || (board[i][j + 5] != "○"))
 				{
 					winNum = 1;
 					return true;
 				}
 			}
 
-			//왼 아래 대각
+			// 백돌 ↗
 			if (board[i][j] == "○" && board[i - 1][j + 1] == "○" && board[i - 2][j + 2] == "○" && board[i - 3][j + 3] == "○" && board[i - 4][j + 4] == "○")
 			{
+				if (i == 0 && j == MAX  || i-4 == MAX && j + 4 == 0)
+				{
+					winNum = 1;
+					return true;
+				}
+
 				if (board[i + 1][j - 1] != "○" && board[i - 5][j + 5] != "○")
 				{
 					winNum = 1;
@@ -96,9 +116,15 @@ bool IsGameOver() // row : 행   column : 열
 				}
 			}
 
-			// 오른 아래 대각
+			// 백돌 ↖
 			if (board[i][j] == "○" && board[i + 1][j + 1] == "○" && board[i + 2][j + 2] == "○" && board[i + 3][j + 3] == "○" && board[i + 4][j + 4] == "○")
 			{
+				if (i == 0 && j == 0 || i + 4 == MAX && j + 4 == MAX)
+				{
+					winNum = 1;
+					return true;
+				}
+
 				if (board[i-1][j - 1] != "○" && board[i+5][j + 5] != "○")
 				{
 					winNum = 1;
@@ -106,32 +132,19 @@ bool IsGameOver() // row : 행   column : 열
 				}
 			}
 
-			// 왼 위 대각
-			if (board[i][j] == "○" && board[i - 1][j - 1] == "○" && board[i - 2][j - 2] == "○" && board[i - 3][j - 3] == "○" && board[i - 4][j - 4] == "○")
-			{
-				if (board[i+1][j + 1] != "○" && board[i-5][j - 5] != "○")
-				{
-					winNum = 1;
-					return true;
-				}
-			}
-
-			//오른 위 대각
-			if (board[i][j] == "○" && board[i + 1][j - 1] == "○" && board[i + 2][j - 2] == "○" && board[i + 3][j - 3] == "○" && board[i + 4][j - 4] == "○")
-			{
-				if (board[i - 1][j + 1] != "○" && board[i+5][j - 5] != "○")
-				{
-					winNum = 1;
-					return true;
-				}
-			}
 
 			// 가로
 			if (board[i][j] == "●" && board[i + 1][j] == "●" && board[i + 2][j] == "●" && board[i + 3][j] == "●" && board[i + 4][j] == "●")
 			{
-				if (board[i + 5][j] != "●" && board[i - 1][j] != "●")
+				if (i == 0 || i + 4 == MAX)
 				{
-					winNum = 1;
+					winNum = 2;
+					return true;
+				}
+
+				if ((board[i - 1][j] != "●") || (board[i + 5][j] != "●"))
+				{
+					winNum = 2;
 					return true;
 				}
 			}
@@ -139,52 +152,51 @@ bool IsGameOver() // row : 행   column : 열
 			//세로
 			if (board[i][j] == "●" && board[i][j + 1] == "●" && board[i][j + 2] == "●" && board[i][j + 3] == "●" && board[i][j + 4] == "●")
 			{
-				if (board[i][j - 1] != "●" && board[i][j + 5] != "●")
+				if (j == 0 || j + 4 == MAX)
 				{
-					winNum = 1;
+					winNum = 2;
+					return true;
+				}
+
+				if ((board[i][j - 1] != "●") || (board[i][j + 5] != "●"))
+				{
+					winNum = 2;
 					return true;
 				}
 			}
 
-			//왼 아래 대각
+			//흑돌 ↗
 			if (board[i][j] == "●" && board[i - 1][j + 1] == "●" && board[i - 2][j + 2] == "●" && board[i - 3][j + 3] == "●" && board[i - 4][j + 4] == "●")
 			{
+				if (i == 0 && j == MAX || i - 4 == MAX && j + 4 == 0)
+				{
+					winNum = 2;
+					return true;
+				}
+
 				if (board[i + 1][j - 1] != "●" && board[i - 5][j + 5] != "●")
 				{
-					winNum = 1;
+					winNum = 2;
 					return true;
 				}
 			}
 
-			// 오른 아래 대각
+			//  흑돌 ↖
 			if (board[i][j] == "●" && board[i + 1][j + 1] == "●" && board[i + 2][j + 2] == "●" && board[i + 3][j + 3] == "●" && board[i + 4][j + 4] == "●")
 			{
+				if (i == 0 && j == 0 || i + 4 == MAX && j + 4 == MAX)
+				{
+					winNum = 2;
+					return true;
+				}
+
 				if (board[i - 1][j - 1] != "●" && board[i + 5][j + 5] != "●")
 				{
-					winNum = 1;
+					winNum = 2;
 					return true;
 				}
 			}
 
-			// 왼 위 대각
-			if (board[i][j] == "●" && board[i - 1][j - 1] == "●" && board[i - 2][j - 2] == "●" && board[i - 3][j - 3] == "●" && board[i - 4][j - 4] == "●")
-			{
-				if (board[i + 1][j + 1] != "●" && board[i - 5][j - 5] != "●")
-				{
-					winNum = 1;
-					return true;
-				}
-			}
-
-			//오른 위 대각
-			if (board[i][j] == "●" && board[i + 1][j - 1] == "●" && board[i + 2][j - 2] == "●" && board[i + 3][j - 3] == "●" && board[i + 4][j - 4] == "●")
-			{
-				if (board[i - 1][j + 1] != "●" && board[i + 5][j - 5] != "●")
-				{
-					winNum = 1;
-					return true;
-				}
-			}
 		}
 	}
 
@@ -192,26 +204,44 @@ bool IsGameOver() // row : 행   column : 열
 	
 } // 5개 
 
+// 바둑돌 차례 출력
+void PrintTurn()
+{
+	gotoxy(20, 0);
+	if (turn % 2 == 1)
+	{
+		cout << "흑돌 차례" << endl;
+	}
+	else
+	{
+		cout << "백돌 차례" << endl;
+	}
+	gotoxy(column, row);
+}
+
+// 바둑돌 차례 지우기
 void EraseTurn()
 {
 	gotoxy(20, 0);
 	cout << "        " << endl;
 }
 
+// 바둑돌 승자 출력
 void PrintWinner()
 {
 	gotoxy(0, 18);
 
 	if (winNum == 1)
 	{
-		cout << "백돌이 이겼습니다!" << endl;
+		cout << "흑돌이 이겼습니다!" << endl;
 	}
 
 	else if (winNum == 2)
 	{
-		cout << "흑돌이 이겼습니다!" << endl;
+		cout << "백돌이 이겼습니다!" << endl;
 	}
 }
+
 
 
 
@@ -221,8 +251,11 @@ int main()
 	SetBoard();
 	gotoxy(column, row);
 
-	while (!IsGameOver()) // false 되면 break
+	// IsGameOver가 true 되면 while문이 false가 되어 루프 나간다.
+	while (!IsGameOver())
 	{
+		PrintTurn();
+
 		temp = _getch();
 
 
@@ -273,15 +306,7 @@ int main()
 			
 		}
 
-		gotoxy(20, 0);
-		if (turn % 2 == 1)
-		{
-			cout << "백돌 차례" << endl;
-		}
-		else
-		{
-			cout << "흑돌 차례" << endl;
-		}
+		
 		gotoxy(column, row);
 		ChangeTurn();
 
@@ -291,5 +316,6 @@ int main()
 	PrintWinner();
 	
 	system("pause");
+	
 	return 0;
 }
